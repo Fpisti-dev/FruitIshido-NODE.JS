@@ -1,0 +1,44 @@
+<template>
+  <div class="page">
+    <div class="navbar">
+      <div class="navbar-inner sliding">
+        <div class="left">
+          <a href="#" class="link back">
+            <i class="icon icon-back"></i>
+            <!-- Back button -->
+            <span class="ios-only">Back</span>
+          </a>
+        </div>
+        <!-- Title -->
+        <div class="title">TOP 10</div>
+      </div>
+    </div>
+    <div class="page-content">
+      <div class="row">
+        <!-- Each "cell" has col-[width in percents] class -->
+        <div class="col-30">
+          <div class="data-table">
+            <table>
+              <thead>
+                <tr>
+                  <th class="label-cell">Nick name</th>
+                  <th class="numeric-cell">Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each $root.top10s}}
+                  <tr>
+                    <td class="label-cell">{{NickName}}</td>
+                    <td class="numeric-cell">{{Score}}</td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+          <div class="col-70"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+

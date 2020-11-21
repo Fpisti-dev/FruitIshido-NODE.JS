@@ -1,0 +1,99 @@
+<template>
+  <div class="page" data-name="menu">
+
+    <!-- Status bar overlay for fullscreen mode-->
+    <div class="statusbar"></div>
+
+    <!-- Your main view, should have "view-main" class -->
+    <div class="view view-main ios-edges">
+
+      <!-- Page, data-name contains page name which can be used in callbacks -->
+      <div class="page" data-name="home">
+
+        <!-- Top Navbar -->
+        <div class="navbar">
+          <div class="navbar-inner sliding">
+            <div class="left">
+              <a href="#" class="link back">
+                <i class="icon icon-back"></i>
+                <!-- Back button -->
+                <span class="ios-only">Back</span>
+              </a>
+            </div>              
+          </div>
+        </div>
+
+        <!-- Scrollable page content-->
+        <div class="page-content" style='margin: 1em;'>
+ 
+          <!-- Title -->
+          <div class="title">
+            <h2 class="page_title">Manual</h2>
+          </div>            
+  
+          <div class="row">
+            <div id="manualDiv">
+              <p>Text come here</p>
+            </div>
+          </div>
+
+          <div class="block">
+            <div class="row" style="margin-top: 1em;">
+              <button class="col-20 button button-outline btnPrev_Click">Prev</button>
+              <button class="col-20 button button-outline btnNext_Click">Next</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+
+  //Global variable
+  let sManuals = new Array();
+  let pID = 0;
+
+  // Get manual details
+  return {
+    data: function () {        
+      this.$root.manuals.forEach(function (man) {
+        sManuals.push(man);
+      });
+    },on: {
+  		pageInit: function() {
+
+        //display first page and hide Prev button
+        $$('#manualDiv').html(sManuals[pID].ManualHTML);
+        $$('.btnPrev_Click').hide();
+            
+        //next button click  
+	  		$$('.btnNext_Click').on('click', function() {
+  
+          pID++;
+          $$('#manualDiv').html(sManuals[pID].ManualHTML);
+
+          if (pID < 4) $$('.btnNext_Click').show(); else  $$('.btnNext_Click').hide();
+          if (pID > 0) $$('.btnPrev_Click').show(); else $$('.btnPrev_Click').hide();              
+            
+        })
+
+        //prev button click
+        $$('.btnPrev_Click').on('click', function() {
+  
+          pID--;
+          $$('#manualDiv').html(sManuals[pID].ManualHTML);
+
+          if (pID < 4) $$('.btnNext_Click').show(); else  $$('.btnNext_Click').hide();
+          if (pID > 0) $$('.btnPrev_Click').show(); else $$('.btnPrev_Click').hide();
+
+        })
+
+			}
+		}
+  };
+
+</script>
+    

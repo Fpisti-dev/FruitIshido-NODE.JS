@@ -1,0 +1,111 @@
+<template>
+  <div class="page" data-name="catalog">
+    
+    <div class="navbar">
+      <div class="navbar-inner sliding">
+        <div class="left">
+          <a href="#" class="link back">
+            <i class="icon icon-back"></i>
+            <!-- Back button -->
+            <span class="ios-only">Back</span>
+          </a>
+        </div>
+      <div class="title">Top 10 form</div>
+      </div>
+    </div>
+    
+    <div class="page-content">
+      <div class="row">
+        <!-- Each "cell" has col-[width in percents] class -->
+        <div class="col-30">
+          <div class="data-table">
+            <table>
+              <thead>
+                <tr>
+                  <th class="label-cell">Nick name</th>
+                  <th class="numeric-cell">Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each $root.top10s}}
+                  <tr>
+                    <td class="label-cell">{{NickName}}</td>
+                    <td class="numeric-cell">{{Score}}</td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col-30">
+        
+          <div class="row">
+            <h3>Congratulation, your score {{$route.params.id}} in TOP 10 !</h3>
+          </div>
+        
+          <div class="row">
+            <div class="item-title floating-label" >Please enter your nick name to save your result?</div>
+          </div>
+
+          <div class="list no-hairlines-md">
+            <form class="list" id="my-form">
+              <ul>
+                <li>
+                  <div class="item-content item-input">
+                    <div class="item-inner">
+                      <div class="item-title item-label">Nickname</div>
+                      <div class="item-input-wrap">
+                        <!-- Username text field -->
+                        <input type="text" placeholder="Nickname" name="nickname" id="nickname" required validate />
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>              
+            </form>
+          </div>
+
+          <div class="block block-strong">
+            <p class="row">
+              <!-- Submit button -->
+              <a class="col button button-fill" @click="alert()">Submit</a>
+            </p>
+          </div>
+        </div>
+
+        <div class="col-30"></div>
+      </div>  
+    </div>
+  </div> 
+</template>
+
+<script>
+
+  return {
+    // Component Methods
+    methods: {
+      alert: function() {
+        // Check username filled out
+        if(document.forms['my-form'].nickname.value === ""){
+          app.dialog.alert("Nickname empty, please fill it out?");
+        }
+        else {
+          let score = this.$route.params.id;
+          //console.log(score);
+     
+          var formData = app.form.convertToData('#my-form');
+
+          // Add score to form data
+          formData["score"] = score;
+                
+          //console.log(JSON.stringify(formData));
+          app.request.postJSON('http://localhost:3000/addTop10', formData);
+
+          //app.dialog.alert('Submitted');
+        }
+      }
+    }
+  }
+
+</script>
+  

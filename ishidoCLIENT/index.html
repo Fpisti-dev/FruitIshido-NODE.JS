@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: gap: content:">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#2196f3">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <title>My App
+    </title>
+    <link rel="stylesheet" href="node_modules/framework7/css/framework7.min.css">
+    <!-- Path to your custom app styles-->
+    <link rel="stylesheet" href="./css/style.css">​
+  </head>
+  <body>
+    <div id="app">
+      <!-- Status bar overlay for fullscreen mode-->
+      <div class="statusbar">
+      </div>
+      <!-- Your main view, should have "view-main" class -->
+      <div class="view view-main ios-edges">
+        <!-- Page, data-name contains page name which can be used in callbacks -->
+        <div class="page" data-name="home">
+          <!-- Top Navbar -->
+          <div class="navbar">
+            <div class="navbar-inner">
+              <!-- Title -->
+              <div class="title sliding"><h2>Fruit Ishido</h2>
+              </div>
+
+              <div class="menu">
+                <div class="menu-inner">
+                  <a href="/top10/" class="menu-item" style="margin-left: 1em;">Top 10</a>
+                  <a href="/manual/" class="menu-item" style="margin-left: 1em;">Manual</a>
+                  <a href="/about/" class="menu-item" style="margin-left: 1em;">About</a>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Scrollable page content-->
+          <div class="page-content" style='margin: 1em;'>
+
+            <!-- Each "cells" row should be wrapped with div class="row" -->
+            <div class="row">
+              <!-- Each "cell" has col-[width in percents] class -->
+              <div class="col-40">
+                  <div class="row">
+                      <div class="item-title floating-label" style="white-space: pre-wrap;" ID="lblMessageDisplay">Messages:</div>
+                      <div class="item-input">
+                          <input type="text" ID="txtMessageDisplay" ReadOnly="True">
+                      </div>
+                  </div>
+
+                  <div class="row">
+                      <div class="item-title floating-label col-20" ID="lblNextStone">Next Stone</div>
+                      <div class="item-input col-80">
+                          <button  ID="btnNextStone" style="height: 50px; width: 50px;" disabled></button>
+                      </div>
+                  </div>
+
+                  <div class="row">
+                      <div class="item-title floating-label" ID="lblUsedStoneDisplay">Used Stones:</div>
+                      <div class="item-input">
+                          <input type="text" ID="txtUsedStoneDisplay" ReadOnly="True">
+                      </div>
+                  </div>
+
+                  <div class="row">
+                      <div class="item-title floating-label" ID="lblLeftStoneDisplay">Left Stones:</div>
+                      <div class="item-input">
+                          <input type="text" ID="txtLeftStoneDisplay" ReadOnly="True">
+                      </div>
+                      
+                  </div>
+
+                  <div class="row">
+                      <div class="item-title floating-label" ID="lblScoreDisplay">Score:</div>
+                      <div class="item-input">
+                          <input type="text" ID="txtScoreDisplay" ReadOnly="True">
+                      </div>
+                      
+                  </div>
+
+                  <div class="row">
+                      <div class="item-title floating-label" ID="lblFourWayDisplay">Four Ways:</div>
+                      <div class="item-input">
+                          <input type="text" ID="txtFourWayDisplay" ReadOnly="True">
+                      </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="buttons-row" style="margin-top: 1em;">
+                      <button id="btnNewGame" class="button button-fill color-cyan btnNewGame_Click">New Game</button>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                      <div class="buttons-row" style="margin-top: 1em;">
+                        <button id="btnSave" class="col-20 button button-fill color-cyan btnSave_Click">Save</button>
+                      </div>
+                  </div>
+
+                  <div class="row">
+                      <div class="buttons-row" style="margin-top: 1em;">
+                        <input type="file" id="btnLoad" style="display:none;"></input>
+                        <label for="btnLoad" class="button button-fill color-cyan">Load</label>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="col-60">
+                  <div ID="panGame" style="height:400px; width:600px"></div>
+              </div>
+            </div>  
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Framework7 library -->
+    <script src="node_modules/framework7/js/framework7.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- App routes -->
+    <script src="js/routes.js"></script>
+
+    <!-- Your custom app scripts -->
+    <script src="js/app.js"></script> 
+    <script src="js/colors.js"></script>
+    <script src="js/game.js"></script>
+    <script src="classes/stone.js"></script>
+    <script src="classes/stock.js"></script>
+    <script src="classes/scores.js"></script>  
+
+    <script>
+    
+      //Global variable
+      const sColumn = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
+      const sRow = ["1", "2", "3", "4", "5", "6", "7", "8"];
+      const sFruitName = ["A", "B", "C", "D", "E", "F"];
+      const sSteps = new Array(72);
+    
+      // Colors
+      const cBorder = fullColorHex(169, 169, 169);
+      const cTable = fullColorHex(211, 211, 211);
+      const cStoneColor = [ 
+        fullColorHex(255, 185, 244), 
+        fullColorHex(188, 255, 162), 
+        fullColorHex(121, 252, 250), 
+        fullColorHex(255, 253, 79), 
+        fullColorHex(250, 250, 250), 
+        fullColorHex(252, 191, 111) 
+      ];
+
+      // Lists of objects
+      let sel = new Array(); // StoneList
+      let skl = new Array(); // StockList
+
+      let sc = Scores;
+
+      // Call functions for first game
+      BuildTable();
+      StartGame();
+        
+      $$('.btnNewGame_Click').on('click', function () {
+        app.dialog.confirm('Do you want to start a new game?', 'Nem game', function () { 
+          StartGame();
+        });
+      });
+
+      $$('.btnSave_Click').on('click', function () {
+        app.dialog.confirm('Do you want to save this game?', 'Save', function () {
+
+          let data = new Array();
+          data.push(sel);
+          data.push(skl);
+          data.push(Object.entries(sc));
+
+          download(JSON.stringify(data), 'game.txt', 'text/plain');
+          
+        });        
+      });
+        
+      function download(content, fileName, contentType) {
+        var a = document.createElement("a");
+        var file = new Blob([content], {type: contentType});
+        a.href = URL.createObjectURL(file);
+        a.download = fileName;
+        a.click();
+      }
+
+      function getFile() {
+        app.dialog.confirm('Do you want to load a game?', 'Load', function () {
+          let fileIndex = document.getElementById("btnLoad").files.length;
+          let fileToLoad = document.getElementById("btnLoad").files[fileIndex-1];
+          let fileReader = new FileReader();
+          
+          fileReader.onload = function(fileLoadedEvent){
+          let textFromFileLoaded = fileLoadedEvent.target.result;
+          restoreGame(textFromFileLoaded);
+
+          //delete files from input after it's loaded
+          fileIndex.value = "";
+          };
+
+          fileReader.readAsText(fileToLoad, "UTF-8");
+
+        });
+      }
+
+      document.getElementById('btnLoad').addEventListener('change', getFile);
+        
+    </script>
+  </body>
+</html>
